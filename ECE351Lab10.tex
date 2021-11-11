@@ -1,0 +1,187 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT PREAMBLE %%%
+\documentclass[12pt]{report}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.95}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\title{Lab 10: Frequency Response}								
+% Title
+\author{Abdalrahman Alhajri}						
+% Author
+\date{Nov 10, 2021}
+% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+   % \includegraphics[scale = 0.075]{bsulogo.png}\\[1.0 cm]	% University Logo
+\begin{center}    \textsc{\Large   ECE 351 - Section \#52 }\\[2.0 cm]	\end{center}% University Name
+	\textsc{\Large Lab 10 Report }\\[0.5 cm]				% Course Code
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries \thetitle}\\
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+		%	\emph{Submitted To:}\\
+		%	Name\\
+          % Affiliation\\
+           %contact info\\
+			\end{flushleft}
+			\end{minipage}~
+			\begin{minipage}{0.4\textwidth}
+            
+			\begin{flushright} \large
+			\emph{Submitted By :} \\
+			Abdalrahman Alhajri  
+		\end{flushright}
+           
+	\end{minipage}\\[2 cm]
+	
+%	\includegraphics[scale = 0.5]{PICMathLogo.png}
+    
+    
+    
+    
+	
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\thesection}{\arabic{section}}
+\section{Introduction}
+The objective of this lab is to become familiar with  frequency response tools and Bode plots using Python. For the pre-lab, we symbolically developed two equations expressing the magnitude and phase for the given band pass circuit filter shown below. We used these two equations in the process of building the filter to show its Bode plots.\\
+\includegraphics[]{circuit.PNG}
+
+\section{Equations}
+Throughout the lab, we worked with the transfer function $H(s)$ for the band pass filter. We also found its magnitude and phase symbolically as follow:\\
+$$H(s) = \frac{\frac{s}{RC}}{s^2+\frac{s}{RC}+\frac{1}{LC}}$$
+$$|H(j\omega)| = \frac{\frac{\omega}{RC}}{\sqrt{(\frac{1}{LC}-\omega^2)^2+(\frac{\omega}{RC})^2}}$$
+$$\angle H(j\omega) = 90 - \arctan(\frac{\frac{\omega}{RC}}{\frac{1}{LC}-\omega^2})$$
+
+In addition, we used the input function $x(t)$ shown below as a signal passing through the circuit filter and its output is referred to as $y(t)$:\\
+$$x(t)=\cos(2\pi\cdot100t) + \cos(2\pi\cdot3024t) + \sin(2\pi\cdot50000t)$$
+
+\section{Methodology}
+This lab consists of two parts:
+\begin{itemize}
+    \item
+    Part 1:\\
+    The first part of this lab focuses on building background knowledge of what are Bode plots representing and how to develop a user-defined function to plot them for the band pass filter given. After plotting the Bode plots for the filter as shown is figure 1, we compared it to the output of the built-in function scipy.signal.bode() shown in figure 2. We then re-plotted the Bode-plot using the code provided in the lab handout using the frequency domain in (Hz) instead of (rad/s). This is shown in figure 3 in the results section along with the other figures.
+
+    \item
+    Part 2:\\
+    This part carries on using the band pass filter developed in part 1. First, we plotted the input signal $x(t)$ in time domain as shown in figure 4. Then, using the z-domain of the transfer function $H(s)$ obtained by using the function scipy.signal.bilinear(), we used scipy.signal.lfilter() to pass the input signal $x(t)$ through the filter. Doing so resulted in the output $y(t)$ which is shown in figure 5 in the results section.
+
+\end{itemize}
+   
+   
+\section{Results}
+\begin{itemize}
+    \item Part 1:\\
+    The Bode plots created using the user-defined function built in this part is shown as:\\
+    \includegraphics[]{Figure 1.png}\\
+    It was also compared to the following two Bode plots developed using a built-in function. These are shown once using the frequency domain in (rad/s) and another in (Hz) as follows:\\
+    \includegraphics[]{Figure 2.png}\\
+    \includegraphics[]{Figure 3.png}\\
+    We see that our function is matching the one found using the user defined function. We also notice that the filter is a band pass filter as expected and it allows signals with frequency $10^3 Hz\le f \le 10^4 Hz$.
+    
+    \item Part 2:\\
+    The signal $x(t)$ is shown below in figure 4 followed by the output $y(t)$ gained after passing the filter. This output is shown also below in figure 5:\\
+    \includegraphics[]{Figure 4.png}\\
+    \includegraphics[]{Figure 5.png}\\
+    We see that the low and high frequency input signals were filtered out after passing through the filter with the characteristics shown in part 1. This explains why $y(t)$ looks very similar to the signal $y(t)\approx x(t)=\cos(2\pi\cdot3024t)$.
+    
+\end{itemize}
+
+\section{Questions}
+
+\begin{enumerate}
+    \item 
+    Explain how the filter and filtered output in Part 2 makes sense given the Bode plots from Part 1. Discuss how the filter modifies specific frequency bands, in Hz\\
+    As shown in the results from part 1, we gain that the filter passes signals with frequency $10^3 Hz\le f \le 10^4 Hz$. More specifically, the filter best passes signals with frequency $f \approx 3000 Hz$. Therefore, we gained that the signal after passing the filter is $y(t)\approx \cos(2\pi\cdot3024t)$.\\
+    
+    \item
+    Discuss the purpose and workings of scipy.signal.bilinear() and scipy.signal.lfilter().
+    \begin{itemize}
+        \item scipy.signal.bilinear():\\
+        A function used to convert a function in the s-domain to z-domain such as converting the transfer function $H(s)$ to the z-domain before passing a signal through it.
+        \item scipy.signal.lfilter():\\
+        A function used to pass a signal through a transfer function in the z-domain which outputs the filtered signal in the time domain.\\
+    \end{itemize}
+    
+    \item
+    What happens if you use a different sampling frequency in scipy.signal.bilinear() than you used for the time-domain signal?\\
+    When changing the fs used in scipy.signal.bilinear(), we will be changing the characteristics of the filter. This will results for the filter to filter out different band from the one we found in part 1.\\
+    
+    \item
+    Leave any feedback on the clarity of the expectations, instructions, and deliverables.\\
+    The lab was clear although more difficult than most of the previous ones. However, we now have more experience and background on how to deal with this level of complexity.
+    
+\end{enumerate}
+
+\section{Conclusion}
+Throughout this lab, we learned how to develop Bode plots for transfer functions. More importantly, we learned how to read and understand a filter's characteristics by reading it's Bode plots. In addition, our results confirmed what we expected and matched what we gained as outputs. 
+
+\end{document}
+
+%This template was created by Roza Aceska.
